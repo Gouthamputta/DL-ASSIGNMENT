@@ -1,0 +1,64 @@
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+# Load your dataset (replace with the actual dataset file path)
+data = pd.read_csv('renewable_energy_demand.csv')
+
+# Preprocessing: Assume the dataset has 'demand', 'temperature', 'humidity', 'time_of_day' columns
+# The target is the 'demand' (future energy demand), and we use other features for prediction
+
+# Example: Let’s consider the 'demand' as the target and other columns as features
+features = data[['temperature', 'humidity', 'time_of_day']]
+target = data['demand']
+
+# Normalize features using MinMaxScaler
+scaler = MinMaxScaler(feature_range=(0, 1))
+features_scaled = scaler.fit_transform(features)
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(features_scaled, target, test_size=0.2, shuffle=False)
+
+# Reshape data for the neural network input (to be used in LSTM or Dense network)
+X_train = np.array(X_train)
+X_test = np.array(X_test)
+y_train = np.array(y_train)
+y_test = np.array(y_test)
+
+# Build a simple feedforward neural network model using Keras
+model = tf.keras.Sequential()
+
+# Add layers to the neural network
+model.add(tf.keras.layers.Dense(64, input_dim=X_train.shape[1], activation='relu'))
+model.add(tf.keras.layers.Dense(32, activation='relu'))
+model.add(tf.keras.layers.Dense(1))  # Output layer for regression (continuous value prediction)
+
+# Compile the model
+model.compile(optimizer='adam', loss='mean_squared_error')
+
+# Train the model
+history = model.fit(X_train, y_train, epochs=100, batch_size=32, validation_data=(X_test, y_test))
+
+# Evaluate the model
+loss = model.evaluate(X_test, y_test)
+print(f'Test loss: {loss}')
+
+# Make predictions
+predictions = model.predict(X_test)
+
+# Plot the predictions vs actual values
+plt.figure(figsize=(10, 6))
+plt.plot(y_test, label='Actual Demand')
+plt.plot(predictions, label='Predicted Demand')
+plt.title('Renewable Energy Demand Forecasting')
+plt.xlabel('Time (Test Samples)')
+plt.ylabel('Demand')
+plt.legend()
+plt.show()
+
+# Output: Predicted vs Actual Demand
+print(f'Predictions: {predictions[:10]}')
+print(f'Actual values: {y_test[:10]}')
