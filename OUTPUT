@@ -1,0 +1,21 @@
+ Expected Output:
+
+1. **Test Loss (MSE):**
+   - The printed test loss will look something like this (the exact number depends on your data and model performance):
+     ```bash
+     Test loss: 0.0253
+     ```
+   This indicates the MSE between the model's predictions and the actual values. Lower MSE suggests better performance.
+
+2. **Predictions vs Actual Values Plot:**
+   - A graph will display actual vs predicted demand values over time. It will look something like this (assuming your model performs well):
+
+     ![Example Plot](https://via.placeholder.com/600x400.png?text=Example+Plot)
+
+   The "Actual Demand" line represents the true demand values, and the "Predicted Demand" line shows the values the model has forecasted. Ideally, the two lines should closely follow each other, indicating that the model's predictions are accurate.
+
+3. **Predictions and Actual Values:**
+   - The first 10 predictions and actual values will be printed as follows:
+     ```bash
+     Predictions: [12.58, 13.21, 14.32, 15.67, 13.89, 16.20, 14.47, 12.58, 15.12, 13.79]
+     Actual values: [12.40, 13.15, 14.20, 15.60, 13.85, 16.10, 14.50, 12.60, 15.10, 13.80]
